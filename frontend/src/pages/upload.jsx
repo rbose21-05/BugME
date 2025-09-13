@@ -1,5 +1,5 @@
 import { useState } from "react";
-import sunnyBg from "../background/uploadbg.jpg";
+import uploadbg from "../background/uploadbg.jpg";
 
 export default function UploadPDF() {
     const [file, setFile] = useState(null);

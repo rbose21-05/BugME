@@ -3,3 +3,6 @@ backend/.env
 backend/uploads
 backend/__pycache__
 study_guide.txt
+.DS_Store
+frontend/.DS_Store
+backend/.DS_Store
