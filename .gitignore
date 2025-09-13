@@ -2,3 +2,4 @@ frontend/node_modules
 backend/.env
 backend/uploads
 backend/__pycache__
+study_guide.txt
