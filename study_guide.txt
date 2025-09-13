@@ -1,0 +1,122 @@
+
+
+--- Page 1 ---
+
+                                           KESHAV GARG he/him 
+         
+linkedin.com/in/keshavgargcs/ 
+| 
+   (413) 472-6062 
+| 
+keshavgarg@umass.edu 
+EDUCATION 
+ 
+University of Massachusetts, Amherst | BS Computer Science Honors                    
+       
+   
+   May 2028 
+Chancellor’s Awardee | Dean’s List       
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+    GPA: 4.0 
+ 
+TECHNICAL SKILL SET 
+ 
+Programming Languages 
+• 
+Java – OOP, Build Platform – Maven, Framework – Springboot / 
+Servlets, DBMS – JDBC / Springboot JPA / Hibernate, Log4j2 / 
+Junit Testing 
+• 
+Python – Flask, File Manipulation, Database Management, Unit 
+Testing 
+• 
+MongoDB / Express / Angular / NodeJS / React / MySQL / 
+HTML / CSS 
+Tools / Technologies 
+      Github, NLP, Gen-AI Implementation, Arduino & Raspberry Pi 
+SDLC 
+      Waterfall, Agile (basic knowledge of Jira tool) 
+LEARNING & EXPERIENCE 
+Technology Support 
+ 
+ 
+ 
+ 
+                             Om Heartcare | Dec 2024 – Jan 2025 
+• 
+Maintained hardware and software infrastructure 
+• 
+Conducted training on use of MS Office applications such as Word, Excel and PowerPoint 
+SWE Intern at Masters’ Union   
+ 
+ 
+ 
+        Jalandhar | 2 June 2025 – 31st July 2025 
+• 
+Worked on Web Development using the MEAN stack 
+• 
+Created WeMeetOffline – a full-stack event management platform 
+Early Research Scholars Program (ERSP)  
+ 
+ 
+ 
+                UMass Amherst | Fall 2025 
+• 
+Selected for a competitive Computer Science research apprenticeship under Dr. Thota 
+• 
+Collaborating in a small, mentored team to conduct original research and develop software solutions 
+• 
+Gaining experience in research methodology, technical writing, and scientific communication 
+Research Assistant     
+ 
+ 
+ 
+ 
+ 
+ 
+                UMass Amherst | Fall 2025 
+• 
+Assisting Dr. Shannon Roberts in the Human Performance Laboratory on “The Future of Trucking”  
+• 
+Iteratively developing an interface for autonomous trucks based on research 
+Undergraduate Teaching Assistant (UGTA) for Calculus                                             UMass Amherst | Fall 2025 
+• 
+Working as a Teaching Assistant for MATH 127, handling study groups and discussion sections, proctoring in 
+course exams, and holding office hours 
+Certified Java Developer                                                                Verma Technical Solutions | Apr 2024 – Aug 2024 
+• 
+Completed Java Developer course, mastering skills in basics of Java 
+• 
+Frontend development in Swing, Database connectivity and concurrence 
+ 
+PROJECTS (github.com/keshavgarg616) 
+• 
+Kairos.ai (Python, Flask, Gen-AI, HTML, CSS): Developed a web platform for UMass students, 
+integrating an event calendar, forum, and AI-driven weekly course summaries, streamlining event 
+planning and enhancing user engagement. 
+• 
+IConNYC (Python, Flask, NLP, GenAI): Developed a New York Times Connections game solver using 
+NLP techniques to identify connections between a set of words; solves puzzles faster and more accurately, 
+improving user engagement and puzzle-solving efficiency; won first place in MassAI project showcase. 
+• 
+WeMeetOffline (Angular, Node.js, Express, MongoDB): Built a full-stack event management platform 
+enabling users to create, discover, and manage in-person or virtual events; implemented Google login and 
+dynamic filtering to enhance accessibility, user experience, and event organization. 
+• 
+Personal Portfolio (React, Tailwind CSS, TanStack Router): Developed a responsive, single-page 
+personal portfolio to showcase projects, experience, and achievements. Implemented dynamic routing 
+using TanStack Router and optimized UI with Tailwind CSS for fast, accessible browsing across devices. 
+• 
+College Schedule Comparer (Python, Flask): Built a web application that compares and visualizes different 
+course schedules to identify conflicts and optimize academic planning. Integrated backend logic with Flask 
+to dynamically render results based on user input. 
+• 
+ConceptAI (MEAN, Gen-AI, HTML, CSS): Designed an AI-powered concept explanation platform using 
+the MEAN stack. Integrated generative AI to provide contextual, simplified explanations for complex topics, 
+enhancing learning outcomes through a clean and intuitive interface. 
