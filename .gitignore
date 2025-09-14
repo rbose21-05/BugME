@@ -6,3 +6,8 @@ study_guide.txt
 .DS_Store
 frontend/.DS_Store
 backend/.DS_Store
+backend/firebase-admin-key.json
+backend/gcal-api-credentials.json
+backend/firebase.py
+backend/*"*
+backend/study_guide.json
