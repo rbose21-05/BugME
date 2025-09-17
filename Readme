@@ -1,1 +1,93 @@
 BugME
+AI Study Buddy 🤖📚
+Project Description
+AI Study Buddy is an intelligent academic companion designed to enhance your study experience. Developed with a focus on personalized learning, this application uses a powerful combination of artificial intelligence and modern web technologies to help students manage their coursework, prepare for exams, and study more effectively. By leveraging cutting-edge OCR models for document analysis, AI Study Buddy provides a seamless, all-in-one platform for your educational needs.
+
+Features
+Syllabus & Document Upload: Upload your syllabus and other study materials to the platform, which uses advanced OCR models to parse content.
+
+Exam Preparation: Track upcoming exams and create a personalized study plan to prepare efficiently.
+
+Study Notes: Create, organize, and manage your study notes directly within the application.
+
+Quiz Generation: Automatically generate quizzes from your uploaded materials to test your knowledge.
+
+Interactive AI Chatbot: Talk to an AI chatbot to ask questions and get help with your studies in real-time.
+
+Calendar Notifications: Receive timely notifications and reminders from a connected calendar to stay on top of your schedule.
+
+Technologies Used
+The AI Study Buddy is built with a powerful and flexible technology stack to ensure a responsive and intelligent user experience.
+
+Frontend:
+
+React: A popular JavaScript library for building the user interface.
+
+Tailwind CSS: A utility-first CSS framework for fast and custom styling.
+
+JavaScript: The core programming language for the frontend logic.
+
+Backend & AI:
+
+Python: The main language for backend logic and AI model integration.
+
+OCR Models: Optical Character Recognition models, used for analyzing and extracting text from uploaded documents like syllabi.
+
+Firebase: A backend-as-a-service platform for user authentication, real-time database, and cloud functions.
+
+Version Control:
+
+Git & GitHub: For collaborative development and code management.
+
+Getting Started
+To get a local copy up and running, follow these steps.
+
+Prerequisites
+Make sure you have the following installed:
+
+Node.js (LTS version recommended)
+
+npm or Yarn
+
+Python
+
+Installation
+Clone the repository:
+
+Bash
+
+git clone https://github.com/keshavgarg616/BugME
+Navigate to the project directory:
+
+Bash
+
+cd AI-Study-Buddy
+Install dependencies for both frontend and backend:
+
+Bash
+
+# Install Python dependencies (backend)
+pip install -r requirements.txt
+
+# Navigate to the client directory and install frontend dependencies
+cd client
+npm install
+Run the application:
+
+Bash
+
+# Start the backend server
+python app.py
+
+# Start the frontend development server
+npm start
+The application will be accessible at http://localhost:3000.
+
+Collaborators
+This project was a collaborative effort by:
+
+Keshav Garg
+
+Manya Mehta
+
+Rupsa Bose
