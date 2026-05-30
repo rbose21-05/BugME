@@ -9,7 +9,7 @@ import {
 import { useEffect } from "react";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBXvbqpmHNT4AwqF24fkZBTnS81XKTAUAA",
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
     authDomain: "bugme-ed29d.firebaseapp.com",
     projectId: "bugme-ed29d",
     storageBucket: "bugme-ed29d.firebasestorage.app",
@@ -18,6 +18,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
