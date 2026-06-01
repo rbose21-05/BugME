@@ -6,6 +6,8 @@ export default function CoursePage() {
     const location = useLocation();
     const navigate = useNavigate();
     const { courseName } = location.state || {};
+     
+    if (courseName) localStorage.setItem("selectedCourse", courseName);
 
     return (
         <div
@@ -56,11 +58,11 @@ export default function CoursePage() {
                             Calendar
                         </a>
                         <a
-                            onClick={() => navigate("/studyguide")}
-                            className="rock-salt-regular flex flex-col items-center justify-center bg-yellow-100 rounded-2xl shadow-lg p-10 hover:bg-yellow-200 transition font-bold text-2xl text-gray-700 tracking-tight"
+                            onClick={() => navigate("/studyguide", { state: { courseName } })}
+                            className="rock-salt-regular flex flex-col items-center justify-center bg-yellow-100 rounded-2xl shadow-lg p-10 hover:bg-yellow-200 transition font-bold text-2xl text-gray-700 tracking-tight cursor-pointer"
                             style={{
-                                color: "#4a4a4a", // graphite gray
-                                textShadow: "0.5px 0.5px 0.5px rgba(0,0,0,0.3)", // faint pencil smudge
+                                color: "#4a4a4a",
+                                textShadow: "0.5px 0.5px 0.5px rgba(0,0,0,0.3)",
                             }}
                         >
                             Study Guide
@@ -75,10 +77,11 @@ export default function CoursePage() {
                             Learn
                         </a>
                         <a
-                            className="rock-salt-regular flex flex-col items-center justify-center bg-yellow-100 rounded-2xl shadow-lg p-10 hover:bg-yellow-200 transition font-bold text-2xl text-gray-700 tracking-tight"
+                            onClick={() => navigate("/quiz", { state: { courseName } })}
+                            className="rock-salt-regular flex flex-col items-center justify-center bg-yellow-100 rounded-2xl shadow-lg p-10 hover:bg-yellow-200 transition font-bold text-2xl text-gray-700 tracking-tight cursor-pointer"
                             style={{
-                                color: "#4a4a4a", // graphite gray
-                                textShadow: "0.5px 0.5px 0.5px rgba(0,0,0,0.3)", // faint pencil smudge
+                                color: "#4a4a4a",
+                                textShadow: "0.5px 0.5px 0.5px rgba(0,0,0,0.3)",
                             }}
                         >
                             Quiz

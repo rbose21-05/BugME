@@ -9,6 +9,7 @@ import ProtectedRoute from "./ProtectedRoute"; // make sure path is correct
 import AboutMe from "./pages/aboutme";
 import Calendar from "./pages/calendar";
 import StudyGuide from "./pages/studyguide";
+import Quiz from "./pages/quiz";
 
 export default function AppRouter() {
     return (
@@ -20,6 +21,7 @@ export default function AppRouter() {
                 <Route path="/about" element={<AboutMe />} />
                 <Route path="/calendar" element={<Calendar />} />
                 <Route path="/studyguide" element={<StudyGuide />} />
+                <Route path="/quiz" element={<Quiz />} />
                 {/* Protected Routes */}
                 <Route
                     path="/upload"

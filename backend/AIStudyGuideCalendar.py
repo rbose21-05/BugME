@@ -8,13 +8,13 @@ load_dotenv()
 
 # The client gets the API key from the environment variable `GOOGLE_API_KEY`.
 GEMINI_API_KEY = os.getenv("GOOGLE_API_KEY")
-client = genai.Client()  # ✅ keeping as you had it
+client = genai.Client(api_key=GEMINI_API_KEY)
 
 def promptAI(prompt: str):
     """
     Sends a prompt to the Gemini model and returns the response object.
     """
-    return client.models.generate_content(model="gemini-2.5-flash", contents=prompt)
+    return client.models.generate_content(model="gemini-2.0-flash", contents=prompt)
 
 
 def save_json(data: dict, output_file: str) -> None:

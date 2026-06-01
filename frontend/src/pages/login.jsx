@@ -9,12 +9,12 @@ import {
 import { useEffect } from "react";
 
 const firebaseConfig = {
-    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-    authDomain: "bugme-ed29d.firebaseapp.com",
-    projectId: "bugme-ed29d",
-    storageBucket: "bugme-ed29d.firebasestorage.app",
-    messagingSenderId: "869694226988",
-    appId: "1:869694226988:web:d5b9024a22964cdba28789",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);

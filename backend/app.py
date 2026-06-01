@@ -6,6 +6,7 @@ from AIStudyGuideCalendar import generate_quiz
 from AIStudyGuideCalendar import generate_quiz_deadlines
 from AIStudyGuideCalendar import generate_teach
 import os
+import time
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
@@ -49,11 +50,24 @@ def upload_file():
             notes_file.save(notes_path)
 
             # Process notes PDF
+            
             text = extract_text_from_pdf(notes_path, ocr=True)
+            quiz = {}
+            quiz_calendar = {}
+            teach = {}
             study_guide = generate_study_guide(text)
-            quiz = generate_quiz(text)
-            quiz_calendar = generate_quiz_deadlines(study_guide, quiz, final, midterms)
-            teach = generate_teach(text)
+            if "error" in study_guide:
+                quiz = {"error": "skipped"}
+                quiz_calendar = {"error": "skipped"}
+                teach = {"error": "skipped"}
+            else:
+                time.sleep(15)
+                quiz = generate_quiz(text)
+                time.sleep(15)
+                exam_dates = f"Final: {final}, Midterms: {midterms}" if final or midterms else "No exam dates provided"
+                quiz_calendar = generate_quiz_deadlines(study_guide, quiz, exam_dates)
+                time.sleep(15)
+                teach = generate_teach(text)
 
             responses["notes"] = {
                 "filename": notes_file.filename,
@@ -86,6 +100,9 @@ def upload_file():
     for subj in subjects:
         if courseName in subj:
             subj[courseName]["study_guide"] = study_guide
+            subj[courseName]["quiz"] = quiz
+            subj[courseName]["quiz_calendar"] = quiz_calendar
+            subj[courseName]["teach"] = teach
 
     doc_ref.set({"subjects": subjects}, merge=True)
 
