@@ -19,9 +19,23 @@ export default function AppRouter() {
                 <Route path="/signup" element={<SignupPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/about" element={<AboutMe />} />
-                <Route path="/calendar" element={<Calendar />} />
+                <Route
+                    path="/calendar"
+                    element={
+                        <ProtectedRoute>
+                            <Calendar />
+                        </ProtectedRoute>
+                    }
+                />
                 <Route path="/studyguide" element={<StudyGuide />} />
-                <Route path="/quiz" element={<Quiz />} />
+                <Route
+                    path="/quiz"
+                    element={
+                        <ProtectedRoute>
+                            <Quiz />
+                        </ProtectedRoute>
+                    }
+                />
                 {/* Protected Routes */}
                 <Route
                     path="/upload"

@@ -1,6 +1,5 @@
 import sunnyBg from "../background/sunnybg.jpg";
 import {
-    GoogleAuthProvider,
     onAuthStateChanged,
     signInWithRedirect,
     getRedirectResult,
@@ -8,8 +7,9 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase";
+import { getGoogleProvider, saveGoogleAccessToken } from "../utils/googleCalendar";
 
-const provider = new GoogleAuthProvider();
+const provider = getGoogleProvider();
 
 export default function LoginPage() {
     const navigate = useNavigate();
@@ -21,6 +21,7 @@ export default function LoginPage() {
         getRedirectResult(auth)
             .then((result) => {
                 if (result?.user) {
+                    saveGoogleAccessToken(result);
                     handledRedirect = true;
                     navigate("/landing", { replace: true });
                 }

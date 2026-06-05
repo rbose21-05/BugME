@@ -180,44 +180,52 @@ Return only valid JSON, nothing else.
 
 def generate_quiz_deadlines(
     study_guide: str,
-    
     quizzes: str,
     exam_dates: str,
     output_file: str = None
 ) -> dict:
     """
-    Generates a study schedule with quiz deadlines.
+    Generates a topic-by-topic study schedule with deadlines before exams.
 
     Args:
         study_guide (str): Text from the study guide.
-        
-        quizzes (str): Quiz descriptions or topics.
+        quizzes (str): Quiz questions/topics JSON or text.
         exam_dates (str): Exam date information.
         output_file (str, optional): File to save JSON. Default is None.
 
     Returns:
-        dict: JSON with a "schedule" list of quiz deadlines and prep notes.
+        dict: JSON with a "schedule" list of study milestones and reminders.
     """
-    
-    prompt = f"""
-You are an academic assistant and a skilled planner. 
-Given the following details:
-- Study Guide: {study_guide}
+    from datetime import date
 
+    today = date.today().isoformat()
+
+    prompt = f"""
+You are an academic assistant and study planner.
+Given the following details, build a realistic study calendar.
+
+- Study Guide: {study_guide}
 - Quizzes: {quizzes}
 - Exam Dates: {exam_dates}
+- Today's date: {today}
 
 Create a JSON object with one field:
 
-1. "schedule": A list where each item represents a quiz and includes:
-   - "quiz": the quiz name or topic
-   - "deadline": a recommended completion date (YYYY-MM-DD format)
-   - "notes": short advice for preparing (e.g., "revise chapter 2 first", "review practice problems").
+1. "schedule": A list of 6-12 items ordered by deadline (earliest first).
+   Each item must include:
+   - "topic": the specific topic or milestone (e.g., "Complete Chapter 3: Cell Division")
+   - "type": one of "study", "quiz", or "exam"
+   - "deadline": target completion date in YYYY-MM-DD format (must be today or later)
+   - "notes": 1-2 sentences on what to do that day (review, practice, take quiz, etc.)
+   - "reminder_days_before": integer (usually 1; use 2 for exams)
 
 Guidelines:
-- Deadlines must be spaced logically before exams to allow study + review time.
-- Ensure the plan is practical and student-friendly.
-- Use realistic dates based on the exam schedule.
+- Break the study guide into logical topic chunks with spaced deadlines leading up to each exam.
+- Schedule quiz review days before midterms/finals.
+- Include exam days themselves as type "exam" on the actual exam dates when provided.
+- Leave at least 1-2 days between major topics when possible.
+- All deadlines must be on or after {today}.
+- If no exam dates are provided, spread topics across the next 3-4 weeks from {today}.
 
 Return only valid JSON, nothing else.
 """

@@ -7,6 +7,7 @@ from AIStudyGuideCalendar import generate_quiz_deadlines
 from AIStudyGuideCalendar import generate_teach
 import os
 import time
+import json
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
@@ -66,7 +67,19 @@ def upload_file():
                 quiz = generate_quiz(text)
                 time.sleep(15)
                 exam_dates = f"Final: {final}, Midterms: {midterms}" if final or midterms else "No exam dates provided"
-                quiz_calendar = generate_quiz_deadlines(study_guide, quiz, exam_dates)
+                study_guide_text = (
+                    study_guide.get("study_guide", "")
+                    if isinstance(study_guide, dict)
+                    else str(study_guide)
+                )
+                quiz_text = (
+                    json.dumps(quiz.get("quiz", []), indent=2)
+                    if isinstance(quiz, dict) and quiz.get("quiz")
+                    else str(quiz)
+                )
+                quiz_calendar = generate_quiz_deadlines(
+                    study_guide_text, quiz_text, exam_dates
+                )
                 time.sleep(15)
                 teach = generate_teach(text)
 
@@ -168,5 +181,43 @@ def get_courses():
         print("No subjects found")
         return jsonify({"subjects": []}), 200
 
+@app.route("/save-calendar-sync", methods=["POST"])
+def save_calendar_sync():
+    id_token = request.headers.get("Authorization")
+    decoded_token = auth.verify_id_token(id_token)
+    email = decoded_token["email"]
+
+    body = request.json or {}
+    course_name = (body.get("courseName") or "").strip()
+    event_ids = body.get("eventIds", [])
+
+    if not course_name:
+        return jsonify({"error": "Missing courseName"}), 400
+    if not isinstance(event_ids, list):
+        return jsonify({"error": "eventIds must be a list"}), 400
+
+    doc_ref = db.collection("users").document(email)
+    snap = doc_ref.get()
+    if not snap.exists:
+        return jsonify({"error": "User not found"}), 404
+
+    data = snap.to_dict()
+    subjects = data.get("subjects", [])
+    updated = False
+
+    for subj in subjects:
+        if course_name in subj:
+            subj[course_name]["calendar_event_ids"] = event_ids
+            subj[course_name]["calendar_synced_at"] = time.time()
+            updated = True
+            break
+
+    if not updated:
+        return jsonify({"error": f"Course '{course_name}' not found"}), 404
+
+    doc_ref.set({"subjects": subjects}, merge=True)
+    return jsonify({"message": "Calendar sync saved", "eventIds": event_ids}), 200
+
+
 if __name__ == "__main__":
-    app.run(debug=True, port=3000)
+    app.run(debug=True, port=5000)

@@ -1,93 +1,179 @@
-BugME
-AI Study Buddy 🤖📚
-Project Description
-AI Study Buddy is an intelligent academic companion designed to enhance your study experience. Developed with a focus on personalized learning, this application uses a powerful combination of artificial intelligence and modern web technologies to help students manage their coursework, prepare for exams, and study more effectively. By leveraging cutting-edge OCR models for document analysis, AI Study Buddy provides a seamless, all-in-one platform for your educational needs.
+# BugME — AI Study Buddy
 
-Features
-Syllabus & Document Upload: Upload your syllabus and other study materials to the platform, which uses advanced OCR models to parse content.
+BugME is a full-stack study companion for students. Upload course PDFs, get AI-generated study guides and quizzes, and sync an exam-prep schedule to Google Calendar with email and popup reminders.
 
-Exam Preparation: Track upcoming exams and create a personalized study plan to prepare efficiently.
+## Features
 
-Study Notes: Create, organize, and manage your study notes directly within the application.
+- **PDF upload** — Parse lecture notes and syllabi (OCR when needed) via the Flask backend.
+- **AI study guide** — Gemini builds a structured guide from your notes.
+- **Quiz generation** — Auto-generated quizzes to test understanding.
+- **AI teach mode** — Interactive explanations from uploaded material.
+- **AI study schedule** — Topic-by-topic deadlines before midterms and finals, based on your guide and quizzes.
+- **Google Calendar sync** — One-click sync of the AI schedule to your primary calendar, with configurable reminders (popup + email).
+- **Course dashboard** — Per-course hub for guides, quizzes, calendar, and uploads.
+- **Firebase auth** — Google sign-in with per-user data stored in Firestore.
 
-Quiz Generation: Automatically generate quizzes from your uploaded materials to test your knowledge.
+## Tech stack
 
-Interactive AI Chatbot: Talk to an AI chatbot to ask questions and get help with your studies in real-time.
+| Layer | Tools |
+|-------|--------|
+| Frontend | React 19, Vite, Tailwind CSS, React Router |
+| Backend | Python 3.12, Flask, PyMuPDF, pytesseract |
+| AI | Google Gemini (`google-genai`) |
+| Auth & data | Firebase Auth, Firestore, Firebase Admin SDK |
 
-Calendar Notifications: Receive timely notifications and reminders from a connected calendar to stay on top of your schedule.
+## Prerequisites
 
-Technologies Used
-The AI Study Buddy is built with a powerful and flexible technology stack to ensure a responsive and intelligent user experience.
+- **Node.js** 18+ (LTS recommended)
+- **Python** 3.12
+- **Tesseract OCR** (for scanned PDFs): `brew install tesseract` on macOS
+- Firebase project with Google sign-in enabled
+- Google Cloud project with **Gemini API** and **Google Calendar API** enabled
 
-Frontend:
+## Local setup
 
-React: A popular JavaScript library for building the user interface.
+### 1. Clone and install
 
-Tailwind CSS: A utility-first CSS framework for fast and custom styling.
+```bash
+git clone https://github.com/keshavgarg616/BugME.git
+cd BugME
+```
 
-JavaScript: The core programming language for the frontend logic.
+**Backend**
 
-Backend & AI:
-
-Python: The main language for backend logic and AI model integration.
-
-OCR Models: Optical Character Recognition models, used for analyzing and extracting text from uploaded documents like syllabi.
-
-Firebase: A backend-as-a-service platform for user authentication, real-time database, and cloud functions.
-
-Version Control:
-
-Git & GitHub: For collaborative development and code management.
-
-Getting Started
-To get a local copy up and running, follow these steps.
-
-Prerequisites
-Make sure you have the following installed:
-
-Node.js (LTS version recommended)
-
-npm or Yarn
-
-Python
-
-Installation
-Clone the repository:
-
-Bash
-
-git clone https://github.com/keshavgarg616/BugME
-Navigate to the project directory:
-
-Bash
-
-cd AI-Study-Buddy
-Install dependencies for both frontend and backend:
-
-Bash
-
-# Install Python dependencies (backend)
+```bash
+cd backend
+python3.12 -m venv ../venv
+source ../venv/bin/activate   # Windows: ..\venv\Scripts\activate
 pip install -r requirements.txt
+```
 
-# Navigate to the client directory and install frontend dependencies
-cd client
+Place your Firebase service account JSON at `backend/firebase-admin-key.json` (not committed; see `.gitignore`).
+
+**Frontend**
+
+```bash
+cd frontend
 npm install
-Run the application:
+```
 
-Bash
+### 2. Environment variables
 
-# Start the backend server
+**Frontend** — create `frontend/.env`:
+
+```env
+VITE_FIREBASE_API_KEY=your-api-key
+VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your-project-id
+VITE_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
+VITE_FIREBASE_APP_ID=your-app-id
+```
+
+**Backend** — create `backend/.env`:
+
+```env
+GOOGLE_API_KEY=your-gemini-api-key
+GEMINI_MODEL=gemini-2.5-flash
+```
+
+`GOOGLE_API_KEY` is read by `AIStudyGuideCalendar.py` via `python-dotenv`. Optional `GEMINI_MODEL` defaults to `gemini-2.5-flash`.
+
+## How to run
+
+Start both servers (two terminals):
+
+```bash
+# Terminal 1 — backend (from repo root, venv active)
+cd backend
 python app.py
+# → http://127.0.0.1:5000
+```
 
-# Start the frontend development server
-npm start
-The application will be accessible at http://localhost:3000.
+```bash
+# Terminal 2 — frontend
+cd frontend
+npm run dev
+# → http://localhost:5173 (Vite default)
+```
 
-Collaborators
-This project was a collaborative effort by:
+Sign in with Google on the login page, add a course, upload PDFs, then open the calendar view to connect Google Calendar and sync reminders.
 
-Keshav Garg
+## Google Calendar setup
 
-Manya Mehta
+Calendar sync uses Firebase Google sign-in with the `calendar.events` scope. Configure this once per Firebase/Google Cloud project.
 
-Rupsa Bose
+### 1. Enable APIs
+
+In [Google Cloud Console](https://console.cloud.google.com/) (same project as Firebase):
+
+1. **APIs & Services → Library**
+2. Enable **Google Calendar API**
+3. Ensure **Generative Language API** (Gemini) is enabled for the backend
+
+### 2. OAuth consent screen
+
+1. **APIs & Services → OAuth consent screen**
+2. Choose **External** (or Internal for Workspace-only)
+3. Add app name, support email, and developer contact
+4. Under **Scopes**, add: `https://www.googleapis.com/auth/calendar.events`
+5. Save
+
+### 3. OAuth client (usually auto-managed by Firebase)
+
+1. In **Firebase Console → Authentication → Sign-in method**, enable **Google**
+2. Ensure authorized domains include `localhost` for local dev
+3. If prompted, link or create an OAuth 2.0 Web client in Google Cloud
+
+### 4. Test users (required in Testing mode)
+
+While the OAuth app is in **Testing** publishing status:
+
+1. **OAuth consent screen → Test users**
+2. Add every Google account that will sign in locally or in staging
+3. Non-test users will see `access_denied` until the app is published or they are added
+
+### 5. In the app
+
+1. Sign in with Google (login page requests calendar scope)
+2. Open a course → **Calendar**
+3. Click **Connect Google Calendar** if needed, then **Sync to Google Calendar**
+4. Events appear on your primary calendar with reminders; sync metadata is saved in Firestore
+
+## API overview
+
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `/upload` | POST | Upload PDFs; run AI pipeline (guide, quiz, schedule, teach) |
+| `/pushcourses` | POST | Save course list to Firestore |
+| `/getsubjects` | POST | Fetch user courses and AI outputs |
+| `/save-calendar-sync` | POST | Persist Google Calendar event IDs after sync |
+
+All endpoints expect a Firebase ID token in the `Authorization` header.
+
+## Known caveats & troubleshooting
+
+| Issue | What to try |
+|-------|-------------|
+| **AI upload fails / quota errors** | Gemini free tier has rate limits; wait and retry. Check `GOOGLE_API_KEY` and backend logs. Uploads can take 30–60s due to intentional delays between Gemini calls. |
+| **`access_denied` on Google sign-in** | Add your account under OAuth **Test users**, or publish the consent screen. |
+| **Calendar sync fails / 401** | Re-click **Connect Google Calendar** — tokens live in `sessionStorage` and expire when the tab closes. |
+| **Backend connection errors** | Confirm Flask is on port `5000` and CORS is allowed. Frontend calls `http://127.0.0.1:5000`. |
+| **OCR poor quality** | Install Tesseract; use text-based PDFs when possible. |
+| **Course not updating after upload** | Course name on upload must match an existing subject in Firestore. |
+| **Missing Firebase config** | Ensure all `VITE_FIREBASE_*` vars are set; restart `npm run dev` after changing `.env`. |
+
+## Project structure
+
+```
+BugME/
+├── backend/          # Flask API, PDF parsing, Gemini prompts
+├── frontend/         # React + Vite UI
+└── Readme            # This file
+```
+
+## Collaborators
+
+- Keshav Garg
+- Manya Mehta
+- Rupsa Bose

@@ -13,3 +13,31 @@
 .levitate {
     animation: levitate 3s ease-in-out infinite;
 }
+
+.calendar-connect-btn {
+    background-color: #2563eb !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+
+.calendar-connect-btn:hover {
+    background-color: #1d4ed8 !important;
+    border-color: transparent !important;
+}
+
+.calendar-sync-btn {
+    background-color: #16a34a !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+
+.calendar-sync-btn:hover:not(:disabled) {
+    background-color: #15803d !important;
+    border-color: transparent !important;
+}
+
+.calendar-sync-btn:disabled {
+    background-color: #86efac !important;
+    color: #14532d !important;
+    cursor: not-allowed;
+}
