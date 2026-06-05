@@ -8,13 +8,28 @@ load_dotenv()
 
 # The client gets the API key from the environment variable `GOOGLE_API_KEY`.
 GEMINI_API_KEY = os.getenv("GOOGLE_API_KEY")
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 client = genai.Client(api_key=GEMINI_API_KEY)
+
+def _parse_json_response(raw: str) -> dict:
+    """Extract JSON from model output (handles markdown code fences)."""
+    text = raw.strip()
+    if text.startswith("```"):
+        lines = text.split("\n")
+        lines = lines[1:] if lines[0].startswith("```") else lines
+        if lines and lines[-1].strip() == "```":
+            lines = lines[:-1]
+        text = "\n".join(lines).strip()
+    start = text.index("{")
+    end = text.rindex("}") + 1
+    return json.loads(text[start:end])
+
 
 def promptAI(prompt: str):
     """
     Sends a prompt to the Gemini model and returns the response object.
     """
-    return client.models.generate_content(model="gemini-2.0-flash", contents=prompt)
+    return client.models.generate_content(model=GEMINI_MODEL, contents=prompt)
 
 
 def save_json(data: dict, output_file: str) -> None:
@@ -59,10 +74,7 @@ Lecture content:
     try:
         response = promptAI(prompt)
         print("API response received")
-        # print("response.text:", response.text)
-        text = response.text.strip()
-        text = text[text.index("{") : text.rindex("}") + 1]
-        data = json.loads(text)
+        data = _parse_json_response(response.text)
         save_json(data, output_file)
         return data
     except json.JSONDecodeError:
@@ -106,9 +118,7 @@ Return only valid JSON, nothing else.
         response = promptAI(prompt)
         print("API response received.")
         # print("response.text:", response.text)
-        text = response.text.strip()
-        text = text[text.index("{") : text.rindex("}") + 1]
-        data = json.loads(text)
+        data = _parse_json_response(response.text)
         if output_file:
             save_json(data, output_file)
         return data
@@ -156,9 +166,7 @@ Return only valid JSON, nothing else.
     try:
         response = promptAI(prompt)
         print("API response received.")
-        text = response.text.strip()
-        text = text[text.index("{") : text.rindex("}") + 1]
-        data = json.loads(text)
+        data = _parse_json_response(response.text)
         if output_file:
             save_json(data, output_file)
         return data
@@ -217,9 +225,7 @@ Return only valid JSON, nothing else.
     try:
         response = promptAI(prompt)
         print("API response received.")
-        text = response.text.strip()
-        text = text[text.index("{") : text.rindex("}") + 1]
-        data = json.loads(text)
+        data = _parse_json_response(response.text)
         if output_file:
             save_json(data, output_file)
         return data

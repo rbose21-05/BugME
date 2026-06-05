@@ -32,7 +32,7 @@ def upload_file():
     print(request.values.get("midterms"))
     print(request.values.get("finalExam"))
     print(request.files)
-    courseName = request.values.get("courseName")
+    courseName = (request.values.get("courseName") or "").strip()
     # Make sure at least one file was uploaded
     if "notes" not in request.files and "syllabus" not in request.files:
         return jsonify({"error": "No file uploaded"}), 400
@@ -41,6 +41,10 @@ def upload_file():
 
 
     responses = {}
+    study_guide = {}
+    quiz = {}
+    quiz_calendar = {}
+    teach = {}
 
     # Handle Notes PDF
     if "notes" in request.files:
@@ -52,9 +56,6 @@ def upload_file():
             # Process notes PDF
             
             text = extract_text_from_pdf(notes_path, ocr=True)
-            quiz = {}
-            quiz_calendar = {}
-            teach = {}
             study_guide = generate_study_guide(text)
             if "error" in study_guide:
                 quiz = {"error": "skipped"}
@@ -97,17 +98,28 @@ def upload_file():
 
     subjects = data.get("subjects", [])
 
+    updated = False
     for subj in subjects:
-        if courseName in subj:
-            subj[courseName]["study_guide"] = study_guide
-            subj[courseName]["quiz"] = quiz
-            subj[courseName]["quiz_calendar"] = quiz_calendar
-            subj[courseName]["teach"] = teach
+        if courseName and courseName in subj:
+            if study_guide and "error" not in study_guide:
+                subj[courseName]["study_guide"] = study_guide
+            if quiz and "error" not in quiz:
+                subj[courseName]["quiz"] = quiz
+            if quiz_calendar and "error" not in quiz_calendar:
+                subj[courseName]["quiz_calendar"] = quiz_calendar
+            if teach and "error" not in teach:
+                subj[courseName]["teach"] = teach
+            updated = True
 
-    doc_ref.set({"subjects": subjects}, merge=True)
+    if not updated:
+        print(f"Warning: course '{courseName}' not found in Firestore subjects")
+    else:
+        doc_ref.set({"subjects": subjects}, merge=True)
 
+    ai_ok = study_guide and "error" not in study_guide
     return jsonify({
-        "message": "✅ Upload successful",
+        "message": "✅ Upload successful" if ai_ok else "⚠️ PDF saved but AI generation failed — check backend logs",
+        "ai_generated": ai_ok,
         "data": responses
     }), 200
 
@@ -157,4 +169,4 @@ def get_courses():
         return jsonify({"subjects": []}), 200
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=3000)

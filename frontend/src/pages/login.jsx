@@ -1,53 +1,53 @@
-import { initializeApp } from "firebase/app";
 import sunnyBg from "../background/sunnybg.jpg";
 import {
-    getAuth,
-    signInWithPopup,
     GoogleAuthProvider,
     onAuthStateChanged,
+    signInWithRedirect,
+    getRedirectResult,
 } from "firebase/auth";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { auth } from "../firebase";
 
-const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-};
-
-const app = initializeApp(firebaseConfig);
-
-const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 export default function LoginPage() {
+    const navigate = useNavigate();
+    const [status, setStatus] = useState("Checking sign-in status...");
+
     useEffect(() => {
+        let handledRedirect = false;
+
+        getRedirectResult(auth)
+            .then((result) => {
+                if (result?.user) {
+                    handledRedirect = true;
+                    navigate("/landing", { replace: true });
+                }
+            })
+            .catch((error) => {
+                console.error("Redirect sign-in error:", error.message);
+                setStatus("Sign-in failed. Try again.");
+            });
+
         const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                console.log("✅ User is already logged in:", user);
-                window.location.href = "/landing"; // redirect
+            if (user && !handledRedirect) {
+                navigate("/landing", { replace: true });
+            } else if (!user) {
+                setStatus("");
             }
         });
 
         return () => unsubscribe();
-    }, []);
+    }, [navigate]);
 
     const handleGoogleLogin = async () => {
         try {
-            const result = await signInWithPopup(auth, provider);
-            const credential = GoogleAuthProvider.credentialFromResult(result);
-            const token = credential.accessToken;
-            const user = result.user;
-
-            console.log("✅ User signed in:", user);
-            console.log("🔑 Token:", token);
-
-            // Optionally redirect here as well
-            window.location.href = "/landing";
+            setStatus("Redirecting to Google...");
+            await signInWithRedirect(auth, provider);
         } catch (error) {
-            console.error("❌ Login error:", error.message);
+            console.error("Login error:", error.message);
+            setStatus("Sign-in failed. Try again.");
         }
     };
 
@@ -56,24 +56,26 @@ export default function LoginPage() {
             className="h-screen w-screen bg-cover bg-center flex flex-col"
             style={{ backgroundImage: `url(${sunnyBg})` }}
         >
-            {/* Navbar */}
             <nav className="flex justify-between items-center px-8 py-4 bg-black/40 text-black">
                 <a href="/">
                     <div className="text-2xl silly-font text-white">BugME!</div>
                 </a>
             </nav>
 
-            {/* Main content */}
             <div className="flex flex-1 items-center justify-center bg-black/30">
                 <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-8 w-full max-w-md text-center">
                     <h2 className="text-3xl font-bold text-gray-800 mb-6">
                         Log In
                     </h2>
 
-                    {/* Google Login Button */}
+                    {status ? (
+                        <p className="text-gray-600 mb-4">{status}</p>
+                    ) : null}
+
                     <button
                         onClick={handleGoogleLogin}
-                        className="w-full py-3 bg-red-500 text-green-400 font-bold rounded-xl shadow-md hover:bg-red-600 transition"
+                        disabled={!!status && status !== "Sign-in failed. Try again."}
+                        className="w-full py-3 bg-red-500 text-green-400 font-bold rounded-xl shadow-md hover:bg-red-600 transition disabled:opacity-60"
                     >
                         Continue with Google
                     </button>
